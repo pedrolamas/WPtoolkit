@@ -5,6 +5,7 @@
 
 using System;
 using System.Windows;
+using System.Windows.Data;
 using Microsoft.Phone.Controls;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -35,7 +36,6 @@ namespace Microsoft.Phone.Controls
 
         #region PhoneTextBox Properties & Variables
         private Grid RootGrid;
-        private TextBox TextBox;
         private TextBlock MeasurementTextBlock; // Used to measure the height of the TextBox to determine if the action icon is being overlapped.
 
         private Brush ForegroundBrushInactive = (Brush)Application.Current.Resources["PhoneTextBoxReadOnlyBrush"];
@@ -510,6 +510,11 @@ namespace Microsoft.Phone.Controls
         public PhoneTextBox()
         {
             DefaultStyleKey = typeof(PhoneTextBox);
+
+            SetBinding(InternalTextProperty, new Binding("Text")
+            {
+                Source = this
+            });
         }
 
         /// <summary>
@@ -520,18 +525,12 @@ namespace Microsoft.Phone.Controls
         {
             base.OnApplyTemplate();
 
-            if (TextBox != null)
-            {
-                TextBox.TextChanged -= OnTextChanged;
-            }
-
             if (ActionIconBorder != null)
             {
                 ActionIconBorder.MouseLeftButtonDown -= OnActionIconTapped;
             }
 
             RootGrid = GetTemplateChild(RootGridName) as Grid;
-            TextBox = GetTemplateChild(TextBoxName) as TextBox;
             
             // Getting the foreground color to save for later.
             ForegroundBrushEdit = Foreground;
@@ -556,11 +555,6 @@ namespace Microsoft.Phone.Controls
                 UpdateLengthIndicatorVisibility();
             }
 
-            if (TextBox != null)
-            {
-                TextBox.TextChanged += OnTextChanged;
-            }
-
             if (ActionIconBorder != null)
             {
                 ActionIconBorder.MouseLeftButtonDown += OnActionIconTapped;
@@ -572,13 +566,21 @@ namespace Microsoft.Phone.Controls
             MeasurementTextBlock = GetTemplateChild(MeasurementTextBlockName) as TextBlock;
         }
 
+        private static readonly DependencyProperty InternalTextProperty =
+            DependencyProperty.Register("InternalText", typeof(string), typeof(PhoneTextBox), new PropertyMetadata(null, OnInternalTextChanged));
+
+        private static void OnInternalTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var phoneTextBox = (PhoneTextBox)d;
+
+            phoneTextBox.OnTextChanged();
+        }
+
         /// <summary>
         /// Called when the selection changed event occurs. This determines whether the length indicator should be shown or
         /// not and if the TextBox needs to grow.
         /// </summary>
-        /// <param name="sender">Sender TextBox</param>
-        /// <param name="e">Event arguments</param>
-        private void OnTextChanged(object sender, RoutedEventArgs e)
+        private void OnTextChanged()
         {
             UpdateLengthIndicatorVisibility();
             UpdateActionIconVisibility();
