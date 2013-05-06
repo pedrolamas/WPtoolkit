@@ -60,6 +60,11 @@ namespace Microsoft.Phone.Controls
         public DataTemplate FullModeItemTemplate { get; set; }
 
         /// <summary>
+        /// Gets or sets the ItemsPanel.
+        /// </summary>
+        public ItemsPanelTemplate FullModeItemsPanel { get; set; }
+        
+        /// <summary>
         /// Whether the picker page is open or not.
         /// </summary>
         private bool IsOpen
@@ -209,6 +214,10 @@ namespace Microsoft.Phone.Controls
             if (null != FullModeItemTemplate)
             {
                 Picker.ItemTemplate = FullModeItemTemplate;
+            }
+            if (null != FullModeItemsPanel)
+            {
+                Picker.ItemsPanel = FullModeItemsPanel;
             }
 
             if (SelectionMode == SelectionMode.Single)

@@ -67,6 +67,11 @@ namespace Microsoft.Phone.Controls
             get { return (bool)GetValue(IsOpenProperty); }
             set { SetValue(IsOpenProperty, value); }
         }
+        
+        /// <summary>
+        /// Gets or sets the ItemsPanel.
+        /// </summary>
+        public ItemsPanelTemplate FullModeItemsPanel { get; set; }
 
         private static readonly DependencyProperty IsOpenProperty =
             DependencyProperty.Register("IsOpen",
@@ -209,6 +214,10 @@ namespace Microsoft.Phone.Controls
             if (null != FullModeItemTemplate)
             {
                 Picker.ItemTemplate = FullModeItemTemplate;
+            }
+            if(null != FullModeItemsPanel)
+            {
+                Picker.ItemsPanel = FullModeItemsPanel;
             }
 
             if (SelectionMode == SelectionMode.Single)
