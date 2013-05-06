@@ -368,6 +368,21 @@ namespace Microsoft.Phone.Controls
         public static readonly DependencyProperty FullModeItemTemplateProperty =
             DependencyProperty.Register("FullModeItemTemplate", typeof(DataTemplate), typeof(ListPicker), new PropertyMetadata(null, OnShadowOrFullModeItemTemplateChanged));
 
+        /// <summary>
+        /// Gets or sets the ItemsPanel used to display the items when ListPickerMode is set to Full.
+        /// </summary>
+        public ItemsPanelTemplate FullModeItemsPanel
+        {
+            get { return (ItemsPanelTemplate)GetValue(FullModeItemsPanelProperty); }
+            set { SetValue(FullModeItemsPanelProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifies the FullModeItemsPanel DependencyProperty.
+        /// </summary>
+        public static readonly DependencyProperty FullModeItemsPanelProperty =
+            DependencyProperty.Register("FullModeItemsPanel", typeof(ItemsPanelTemplate), typeof(ListPicker), new PropertyMetadata(null));
+
         private static void OnShadowOrFullModeItemTemplateChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
             ((ListPicker)o).OnShadowOrFullModeItemTemplateChanged(/*(DataTemplate)e.OldValue, (DataTemplate)e.NewValue*/);
@@ -1332,6 +1347,7 @@ namespace Microsoft.Phone.Controls
                     }
 
                     _listPickerPage.FullModeItemTemplate = FullModeItemTemplate;
+                    _listPickerPage.FullModeItemsPanel = FullModeItemsPanel;
 
                     _listPickerPage.Items.Clear();
                     if (null != Items)
